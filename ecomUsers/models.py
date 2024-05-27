@@ -8,6 +8,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    #daverobb2011
+    class Meta:
+        verbose_name_plural = 'Categories'
+
 # Customers
 class Customer(models.Model):
     first_name = models.CharField(max_length=50)
@@ -17,7 +21,7 @@ class Customer(models.Model):
     password = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return f"{self.first_name} {self.last_name}"
 
 # All of our Products
 class Product(models.Model):
@@ -30,6 +34,8 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
+
 class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -40,4 +46,4 @@ class Order(models.Model):
     status = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.product
+        return f"Order {self.id} - {self.product.name}"

@@ -1,13 +1,29 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Product
+from rest_framework import viewsets
+from .models import Category, Customer, Product, Order
+from .serializers import CategorySerializer, CustomerSerializer, ProductSerializer, OrderSerializer
+
 
 def index(request):
-    return render(request, 'index.html')
+    products = Product.objects.all()
+    return render(request, 'index.html', {'products': products})
 
-def products(request):
-    return render(request, 'products.html')
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
-def product(request, id):
-    return render(request, 'product.html', {'id': id})
+class CustomerViewSet(viewsets.ModelViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
 
 # Остальные функции, такие как register, login, logout и т.д.
