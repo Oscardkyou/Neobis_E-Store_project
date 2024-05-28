@@ -1,9 +1,7 @@
 from django.shortcuts import render
-from .models import Product
 from rest_framework import viewsets
 from .models import Category, Customer, Product, Order
 from .serializers import CategorySerializer, CustomerSerializer, ProductSerializer, OrderSerializer
-
 
 def index(request):
     products = Product.objects.all()
@@ -24,6 +22,3 @@ class ProductViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-
-
-# Остальные функции, такие как register, login, logout и т.д.
