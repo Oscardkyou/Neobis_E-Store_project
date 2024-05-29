@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
-from .models import Category, Customer, Product, Order, User
+from .models import Category, Customer, Product, Order
 from .serializers import CategorySerializer, CustomerSerializer, ProductSerializer, OrderSerializer
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 def index(request):
     products = Product.objects.all()
@@ -24,6 +25,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+def product_detail_view(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'product_detail.html', {'product_detail': product})
+
+def about_view(request):
+    return render(request, 'about.html')
 
 def login_view(request):
     if request.method == "POST":

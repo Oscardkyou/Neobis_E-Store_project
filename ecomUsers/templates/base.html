@@ -80,7 +80,6 @@
             fetch('/api/products/')
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data); // Вывод данных в консоль для проверки
                     const productContainer = document.querySelector('.row-cols-2');
                     data.forEach(product => {
                         const productElement = `
@@ -101,8 +100,7 @@
                         `;
                         productContainer.innerHTML += productElement;
                     });
-                })
-                .catch(error => console.error('Error fetching products:', error));
+                });
         });
     </script>
 </body>
