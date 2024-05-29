@@ -15,4 +15,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path('logout/', include('djoser.urls.jwt')),
+    path('accounts/', include('allauth.urls')),
 ]
