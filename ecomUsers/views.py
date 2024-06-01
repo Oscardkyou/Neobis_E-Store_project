@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
-from .models import Category, Customer, Product, Order, Cart, CartItem
-from .serializers import CategorySerializer, CustomerSerializer, ProductSerializer, OrderSerializer, CartSerializer, CartItemSerializer
+from .models import Category, Customer, Product, Order, Cart, CartItem, Comment, Review, PromoCode
+from .serializers import CategorySerializer, CustomerSerializer, ProductSerializer, OrderSerializer, CartSerializer, CartItemSerializer, CommentSerializer, ReviewSerializer, PromoCodeSerializer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.http import JsonResponse
 
 def index(request):
     products = Product.objects.all()
@@ -35,10 +36,28 @@ class CartItemViewSet(viewsets.ModelViewSet):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
 
+# Новые классы ViewSet
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+class PromoCodeViewSet(viewsets.ModelViewSet):
+    queryset = PromoCode.objects.all()
+    serializer_class = PromoCodeSerializer
 
 def product_detail_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    return render(request, 'product_detail.html', {'product_detail': product})
+    comments = Comment.objects.filter(product=product)
+    reviews = Review.objects.filter(product=product)
+    return render(request, 'product_detail.html', {
+        'product_detail': product,
+        'comments': comments,
+        'reviews': reviews,
+    })
 
 def about_view(request):
     return render(request, 'about.html')
@@ -92,3 +111,21 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/register2.html', {'form': form})
+
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    cart_item.quantity += 1
+    cart_item.save()
+    cart_count = CartItem.objects.filter(cart=cart).count()
+    return JsonResponse({'success': True, 'cart_count': cart_count})
+
+@login_required
+def cart_detail(request):
+    try:
+        cart = get_object_or_404(Cart, user=request.user)
+        return render(request, 'cart_detail.html', {'cart': cart})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

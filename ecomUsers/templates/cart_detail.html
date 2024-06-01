@@ -1,12 +1,20 @@
-<!-- cart_detail.html -->
-{% extends "base_generic.html" %}
+{% extends "base.html" %}
 
 {% block content %}
   <h2>Your Cart</h2>
   <ul>
     {% for item in cart.cartitem_set.all %}
-      <li>{{ item.product.name }} ({{ item.quantity }})</li>
+      <li>
+        <div>
+          <strong>{{ item.product.name }}</strong> by {{ item.product.author }}<br>
+          <em>{{ item.product.description }}</em><br>
+          Quantity: {{ item.quantity }}<br>
+          Price: {{ item.product.price }}<br>
+          <a href="{% url 'remove_from_cart' item.id %}">Remove</a>
+        </div>
+      </li>
     {% endfor %}
   </ul>
+  <p>Total: {{ cart.total_price }}</p>
   <a href="{% url 'checkout' %}">Proceed to Checkout</a>
 {% endblock %}

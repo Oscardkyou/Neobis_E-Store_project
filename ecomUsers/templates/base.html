@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Django E-commerce</title>
+    <title>{{ product_detail.name }}</title>
     <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
@@ -24,22 +24,22 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">All Products</a></li>
+                            <li><a class="dropdown-item" href="#">All Books</a></li>
                             <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="#">Popular Items</a></li>
+                            <li><a class="dropdown-item" href="#">Popular Books</a></li>
                             <li><a class="dropdown-item" href="#">New Arrivals</a></li>
                             <li><a class="dropdown-item" href="#">Browse Categories</a></li>
-                            <li><a class="dropdown-item" href="#">Sale Items</a></li>
+                            <li><a class="dropdown-item" href="#">Sale Books</a></li>
                             <li><hr class="dropdown-divider" /></li>
                         </ul>
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
+                    <a class="btn btn-outline-dark" href="{% url 'cart' %}">
                         <i class="bi-cart-fill me-1"></i>
                         Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
+                        <span id="cart-count" class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    </a>
                 </form>
                 <ul class="navbar-nav ml-auto">
                     {% if user.is_authenticated %}
@@ -52,20 +52,53 @@
             </div>
         </div>
     </nav>
-    <!-- Header-->
-    <header class="bg-dark py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Shop in style</h1>
-                <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
-            </div>
-        </div>
-    </header>
-    <!-- Section-->
+    <!-- Product Details Section-->
     <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <!-- Products will be loaded here by JavaScript -->
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ product_detail.image.url }}" alt="{{ product_detail.name }}"></div>
+                <div class="col-md-6">
+                    <h1 class="display-5 fw-bolder">{{ product_detail.name }}</h1>
+                    <div class="fs-5 mb-5">
+                        <span>{{ product_detail.price }}</span>
+                    </div>
+                    <p class="lead">{{ product_detail.description }}</p>
+                    <div class="d-flex">
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button" onclick="addToCart({{ product_detail.id }})">
+                            <i class="bi-cart-fill me-1"></i>
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-lg-8">
+                    <h3>Comments</h3>
+                    <ul class="list-unstyled">
+                        {% for comment in comments %}
+                        <li class="media mb-3">
+                            <img class="mr-3 rounded-circle" src="https://via.placeholder.com/50" alt="">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">{{ comment.user.username }}</h5>
+                                {{ comment.text }}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h3>Reviews</h3>
+                    <ul class="list-unstyled">
+                        {% for review in reviews %}
+                        <li class="media mb-3">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">{{ review.user.username }} - {{ review.rating }} Stars</h5>
+                                {{ review.text }}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -76,32 +109,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            fetch('/api/products/')
-                .then(response => response.json())
-                .then(data => {
-                    const productContainer = document.querySelector('.row-cols-2');
-                    data.forEach(product => {
-                        const productElement = `
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <img class="card-img-top" src="${product.image}" alt="${product.name}" />
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <h5 class="fw-bolder">${product.name}</h5>
-                                            ${product.price}
-                                        </div>
-                                    </div>
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/product/${product.id}/">View options</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        productContainer.innerHTML += productElement;
-                    });
-                });
-        });
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function addToCart(productId) {
+            const csrftoken = getCookie('csrftoken');
+            fetch(`/api/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ quantity: 1 })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const cartCount = document.getElementById('cart-count');
+                    cartCount.textContent = data.cart_count;
+                } else {
+                    alert('Error adding product to cart');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
     </script>
 </body>
 </html>

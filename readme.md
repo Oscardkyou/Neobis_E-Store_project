@@ -1,66 +1,67 @@
-![home](32222.png)
+![home](456.png)
 
 # DRF Ecommerce 🛒
 
-DRF Ecommerce - это проект интернет-магазина, построенный на Django Rest Framework. Проект предоставляет функционал для регистрации пользователей, управления товарами, оформления заказов и отзывов.
+DRF Ecommerce is an online store project built with Django Rest Framework. The project provides functionality for user registration, product management, order processing, and reviews.
 
-## Содержание 📑
+![home](12344.png)
 
-- [Описание проекта](#описание-проекта)
-- [Установка](#установка)
-- [Использование](#использование)
-- [Тестирование](#тестирование)
-- [Вклад в проект](#вклад-в-проект)
-- [Лицензия](#лицензия)
+## Table of Contents 📑
 
-## Описание проекта 📜
+- [Project Description](#project-description)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
 
-DRF Ecommerce представляет собой полнофункциональный интернет-магазин, который позволяет пользователям регистрироваться, просматривать товары, оформлять заказы и оставлять отзывы. Проект разработан с использованием Django и Django Rest Framework, что обеспечивает высокую производительность и расширяемость.
+## Project Description 📜
 
-## Установка 🔧
+DRF Ecommerce is a full-featured online store that allows users to register, browse products, place orders, and leave reviews. The project is developed using Django and Django Rest Framework, ensuring high performance and scalability.
 
-Следуйте инструкциям ниже, чтобы установить и запустить проект на вашей машине.
+## Installation 🔧
 
-### Предварительные требования 📋
+Follow the instructions below to install and run the project on your machine.
 
-- Python 3.8 или выше
+### Prerequisites 📋
+
+- Python 3.8 or higher
 - PostgreSQL
 - virtualenv
 
-### Установка 📦
+### Installation 📦
 
-1. Клонируйте репозиторий
-2. Создайте виртуальное окружение
-3. Установите зависимости
-4. Настройте базу данных
+1. Clone the repository
+2. Create a virtual environment
+3. Install dependencies
+4. Configure the database
 
-## Использование 🚀
+## Usage 🚀
 
-После установки и запуска сервера вы можете использовать API для взаимодействия с магазином.
+After installation and starting the server, you can use the API to interact with the store.
 
-### Основной функционал 📌
+### Main Features 📌
 
-- Регистрация и авторизация пользователей
-- Управление товарами через админ панель
-- Просмотр товаров
-- Оформление заказов
-- Оставление комментариев и отзывов
+- User registration and authentication
+- Product management via admin panel
+- Browsing products
+- Placing orders
+- Leaving comments and reviews
 
-### Примеры запросов 📈
+### Example Requests 📈
 
-#### Получение списка товаров
-
-GET /api/products/ 📦
-
-#### Создание нового заказа 🛍️
-
-POST /api/orders/ { "product": 1, "customer": 1, "quantity": 2, "address": "123 Main St", "phone": "1234567890" }
+#### Get a list of products
 
 
-## Тестирование 🧪
+## Testing 🧪
 
+Provide details on how to run tests for the project.
 
-## Вклад в проект 🤝
+## Contributing 🤝
 
+Provide guidelines on how to contribute to the project.
 
-## Лицензия 📜
+## License 📜
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
